@@ -1,5 +1,5 @@
 build:
-  nasm -f elf64 -o $1.o $1.asm
+  nasm -f elf64 -o $1.o $1
   ld -o $1.out $1.o
 
 run: build
