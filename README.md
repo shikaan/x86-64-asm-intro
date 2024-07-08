@@ -1,7 +1,9 @@
 # x86-64-asm-intro
 Learning x86-64 assembly with nasm
 
-## Tools
+## [Program](./docs/program.md)
+
+## Dependencies
 
 ### nasm
 
@@ -15,12 +17,12 @@ sudo apt install nasm
 sudo sh -c "wget -q https://shikaan.github.io/sup/install -O- | REPO=shikaan/shmux sh -"
 ```
 
-## Execute
+## Running an exercise
 
 ```sh
-shmux build -- file.asm
+shmux build -- 00-file.asm
 
-./file.asm.out
+build/00-file.asm.out
 ```
 
 ## References
