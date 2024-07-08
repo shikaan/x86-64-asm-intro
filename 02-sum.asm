@@ -1,10 +1,12 @@
 section .data
-  a:    equ 100
-  b:    equ 50
-  msg:  db  "Correct!\n"
+  SYS_EXIT  equ 60
+  SYS_WRITE equ 1
+  a         equ 100
+  b         equ 50
+  msg       db  "Correct!", 0xa
 
 section .text
-  global _start
+global _start
 
 _start: 
   mov rax, a
@@ -15,17 +17,14 @@ _start:
   jmp .print
 
 .exit:
-  mov rax, 60
+  mov rax, SYS_EXIT
   mov rdi, 0
   syscall
 
 .print:
-  mov rax, 1
-  ; stdout
+  mov rax, SYS_WRITE
   mov rdi, 1
-  ; buffer
   mov rsi, msg
-  ; buffer length
-  mov rdx, 10
+  mov rdx, 9
   syscall
   jmp .exit

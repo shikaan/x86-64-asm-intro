@@ -10,7 +10,7 @@ section .data
   INVALID_MSG_LEN equ $ - INVALID_MSG
 
 section .text
-  global _start
+global _start
 
 _start:
   pop r10

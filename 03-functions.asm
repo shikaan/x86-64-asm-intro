@@ -7,7 +7,7 @@ section .text
 global _start
 _start:
   mov rdi, 1
-  call toString
+  call to_string
   mov rdi, rax
   mov rsi, 2
   call print
@@ -22,19 +22,16 @@ exit:
 
 ; prints a buffer [rdi] with given lenght [rsi]
 print:
-  ; store arguments locally
-  mov r10, rdi
-  mov r11, rsi
   ; perform syscall
   mov rax, SYS_WRITE
+  mov rdx, rsi
+  mov rsi, rdi
   mov rdi, 1
-  mov rsi, r10
-  mov rdx, r11
   syscall
   ret
 
 ; converts single-digit int to string
-toString:
+to_string:
   mov rax, rdi
   add rax, 48
   mov [buffer], rax
