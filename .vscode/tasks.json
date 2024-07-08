@@ -8,6 +8,12 @@
       "type": "shell",
       "problemMatcher": [ ],
       "command": "shmux build -- ${fileBasename}"
+    },
+    {
+      "label": "run",
+      "type": "shell",
+      "problemMatcher": [ ],
+      "command": "shmux run -- ${fileBasename}"
     }
   ]
 }
