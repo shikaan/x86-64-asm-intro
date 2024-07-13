@@ -1,7 +1,6 @@
 - [ ] More exercises with math and bitwise operations
-- [ ] Examples with stack: push/pop without calls
 - [ ] Examples with stack: recursive call
-- [ ] Examples with stack: "private" scope
-- [ ] How to work with memory?
 - [ ] Debugging with gdb
 - [ ] Interop, how can modules reference each other?
+- [ ] Registers, direct, indirect
+- [ ] Mov vs lea
