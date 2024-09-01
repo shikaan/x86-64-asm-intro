@@ -50,7 +50,7 @@ In this guide, we will use _x86-64 assembly_ which can be assembled and executed
 
 For historical reasons, there are two "flavors" of the x64-64 assembly syntax: one called _Intel_ and the other is called _AT&T_. The former is more in vogue in Windows circles, the latter, is instead more adopted in UNIX-land.
 
-> [!NOTE]
+> [!TIP]
 > You can read up on the differences between Intel and AT&T [here](https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm). It might be a little too early to make sense of it if this is your absolute first time. Feel free to come back to this link in a couple of lessons.
 
 In this guide we will stick to the _Intel_ dialect because it's used by the [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html), the source of truth when on what the CPU _really_ does when fed an instruction.
@@ -72,8 +72,8 @@ They represent the smallest unit of assembly language and are mostly composed of
 
 In our example, the mnemonic is `mov`, which stands for _move_, and the operands are `rax` and `rbx`. This instruction in plain English would read: move the content of `rbx` in `rax`.
 
-> [!NOTE]
-> `rax` and `rbx` are general purpose registers. We will introduce them in the next paragraph.
+> [!INFO]
+> `rax` and `rbx` are registers and we will introduce them in the next paragraph. In the meantime, you can imagine them as variables holding a value.
 
 Some instructions will have more then mnemonic and operands. Additional parts such as _prefixes_ and _size directives_ will only be needed later, and we'll talk through them at the right moment.
 
@@ -120,6 +120,6 @@ This process is fairly complex, so we won't dive into its details here. The only
 
 Assemblers are the tools used for assembling (duh!) our code into object code, a sequence of machine code statements. For this guide we'll use [NASM](https://www.nasm.us/) since it's available on all platforms and can be used to produce a variety of different of outputs.
 
-Linkers are used to link (duh!) object code into a single executable. I will be using [ld](https://linux.die.net/man/1/ld) the GNU Linker.
+Linkers are used to link (duh!) object code into a single executable. I will be using [ld](https://linux.die.net/man/1/ld) the GNU Linker since it's already available on most systems.
 
 ## Hello World
