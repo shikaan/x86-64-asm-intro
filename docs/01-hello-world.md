@@ -51,7 +51,7 @@ In this guide, we will use _x86-64 assembly_ which can be assembled and executed
 For historical reasons, there are two "flavors" of the x64-64 assembly syntax: one called _Intel_ and the other is called _AT&T_. The former is more in vogue in Windows circles, the latter, is instead more adopted in UNIX-land.
 
 > [!TIP]
-> You can read up on the differences between Intel and AT&T [here](https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm). It might be a little too early to make sense of it if this is your absolute first time. Feel free to come back to this link in a couple of lessons.
+> You can read up on the differences between Intel and AT&T syntax [here](https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm). If it's your absolute first time with assembly, it might be a little too early to make sense of it. Feel free to come back to this link in a couple of lessons.
 
 In this guide we will stick to the _Intel_ dialect because it's used by the [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html), the source of truth when on what the CPU _really_ does when fed an instruction.
 
@@ -72,14 +72,14 @@ They represent the smallest unit of assembly language and are mostly composed of
 
 In our example, the mnemonic is `mov`, which stands for _move_, and the operands are `rax` and `rbx`. This instruction in plain English would read: move the content of `rbx` in `rax`.
 
-> [!INFO]
+> [!NOTE]
 > `rax` and `rbx` are registers and we will introduce them in the next paragraph. In the meantime, you can imagine them as variables holding a value.
 
 Some instructions will have more then mnemonic and operands. Additional parts such as _prefixes_ and _size directives_ will only be needed later, and we'll talk through them at the right moment.
 
-You can find a comprehensive list of all the mnemonics in [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html). 
+Fear not, there is no reason to memorize all the possible instructions now. Whenever we'll come across new operations, we will discuss them, and with repeated usage you will remember them in no time.
 
-However, there is no need to memorize all the instructions now. Whenever we'll come across new operations, we will discuss them, and with repeated usage you will remember them in no time.
+The [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) will be our instruction reference in the next chapters. Keep the link handy!
 
 ## Registers
 
