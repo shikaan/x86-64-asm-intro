@@ -55,7 +55,9 @@ For historical reasons, there are two "flavors" of the x64-64 assembly syntax: o
 
 In this guide we will stick to the _Intel_ dialect because it's used by the [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html), the source of truth when on what the CPU _really_ does when fed an instruction.
 
-Additionally, since we are so close to the hardware, portability is hard and would obfuscate the content of this introduction. Therefore, the examples we will be written for Linux, even though they should run fine on Window's WSL as well.
+Assembly is all about working close to the hardware. Optimizimg for portability of the code examples across operative systems and architactures would obfuscate the content of this introduction.
+
+The snippets we will be written for Linux, and they should run fine on Window's WSL as well. The general concepts and practices are nonetheless valid regardless of your OS of choice.
 
 ## Anatomy of an instruction
 
@@ -81,7 +83,7 @@ Fear not, there is no reason to memorize all the possible instructions now. When
 
 The [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) will be our instruction reference in the next chapters. Keep the link handy!
 
-## Registers
+## Storing data: Registers
 
 You can think of registers as storage space baked right into the CPU itself. They are small and incredibly fast to access.
 
@@ -112,7 +114,7 @@ General-purpose means that they can store anything, in principle. In practice, w
 
 The only non general-purpose register we will be concerned with is `rip`, the _instruction pointer_ register. It holds the address of the next instruction to execute and therefore modifying `rip` allows programs to jump to arbitrary instructions in the code.
 
-## Assembler
+## Putting it all together: Assembler
 
 We need to convert our instructions into machine code if we want our CPU to execute them. 
 
@@ -122,4 +124,4 @@ Assemblers are the tools used for assembling (duh!) our code into object code, a
 
 Linkers are used to link (duh!) object code into a single executable. I will be using [ld](https://linux.die.net/man/1/ld) the GNU Linker since it's already available on most systems.
 
-## Hello World
+## At last, "Hello World"
