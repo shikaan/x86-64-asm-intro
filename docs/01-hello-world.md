@@ -79,9 +79,9 @@ In our example, the mnemonic is `mov`, which stands for _move_, and the operands
 
 Some instructions will have more then mnemonic and operands. Additional parts such as _prefixes_ and _size directives_ will only be needed later, and we'll talk through them at the right moment.
 
-Fear not, there is no reason to memorize all the possible instructions now. Whenever we'll come across new operations, we will discuss them, and with repeated usage you will remember them in no time.
+Fear not, there is no need to memorize all the possible instructions now. Whenever we'll come across new operations, we will discuss them, and with repetition you will remember them in no time.
 
-The [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) will be our instruction reference in the next chapters. Keep the link handy!
+The [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) will be our instruction reference in the next chapters. Keep it handy!
 
 ## Storing data: Registers
 
@@ -91,24 +91,27 @@ There are different registers in x86-64. The first type are the so-called _gener
 
 For example, using `rax` (as in the code above) would address all the 64 bits in the `rax` register. With `al` you can access the lower byte of the same register.
 
-| Register | Higher byte | Lower byte | Lower 2 bytes |	Lower 4 bytes |
-|:---      |:---         |:---        |:---           |:---           |
-| rax      | ah	         | al	        | ax            | eax           |
-| rcx      | ch	         | cl	        | cx	          | ecx           |
-| rbx      | bh	         | bl	        | bx            | ebx           |
-| rdx      | dh	         | dl	        | dx            | edx           |
-| rsp      |    	       | spl	      | sp	          | esp           |
-| rsi      |             | sil        | si            | esi           |
-| rdi      |             | dil        | di            | edi           |
-| rbp      |             | bpl        | bp	          | ebp           |
-| r8       |             | r8b        | r8w           | r8d           |
-| r9       |             | r9b        | r9w	          | r9d           |
-| r10      |             | r10b       | r10w          | r10d          |
-| r11      |             | r11b       | r11w          | r11d          |
-| r12      |             | r12b       | r12w          | r12d          |
-| r13      |             | r13b       | r13w          | r13d          |
-| r14      |             | r14b       | r14w          | r14d          |
-| r15      |             | r15b       | r15w          | r15d          |
+| Register | Higher byte | Lower byte | Lower 2 bytes¹ |	Lower 4 bytes² |
+|:---      |:---         |:---        |:---            |:---             |
+| rax      | ah	         | al	        | ax             | eax             |
+| rcx      | ch	         | cl	        | cx	           | ecx             |
+| rbx      | bh	         | bl	        | bx             | ebx             |
+| rdx      | dh	         | dl	        | dx             | edx             |
+| rsp      |    	       | spl	      | sp	           | esp             |
+| rsi      |             | sil        | si             | esi             |
+| rdi      |             | dil        | di             | edi             |
+| rbp      |             | bpl        | bp	           | ebp             |
+| r8       |             | r8b        | r8w            | r8d             |
+| r9       |             | r9b        | r9w	           | r9d             |
+| r10      |             | r10b       | r10w           | r10d            |
+| r11      |             | r11b       | r11w           | r11d            |
+| r12      |             | r12b       | r12w           | r12d            |
+| r13      |             | r13b       | r13w           | r13d            |
+| r14      |             | r14b       | r14w           | r14d            |
+| r15      |             | r15b       | r15w           | r15d            |
+
+¹: 2 bytes are sometimes called words (hence the w suffix)
+²: 4 bytes are sometimed called double-word or word (hence the d suffix)
 
 General-purpose means that they can store anything, in principle. In practice, we'll see that some registers have special meanings, some instructions only use certain registers, and some conventions dictate who is expected to write where.
 
@@ -124,4 +127,105 @@ Assemblers are the tools used for assembling (duh!) our code into object code, a
 
 Linkers are used to link (duh!) object code into a single executable. I will be using [ld](https://linux.die.net/man/1/ld) the GNU Linker since it's already available on most systems.
 
+## Our first assembly file
+
+Assembly files typically have an `.s` or `.asm` extension and they are split in three sections:
+* **data**: where we define constants and initialized variables;
+* **bss**: where we define non-initialized variables;
+* **text**: where we will type our code, this is the only mandatory section of the file.
+
+```s
+section .data
+  ; constants here
+
+section .bss
+  ; variables here
+
+section .text
+  ; code here
+```
+
+> [!NOTE]
+> The semicolon `;` is the comment character: whatever comes after it will not be executed.
+
+Assembly programs run as you would expect: they start with the first instruction and sequentially execute one intruction after the other, from top to bottom. To create control flow such as conditionals and loops we make our programs 'jump' to specific instructions. We will look at jumps more in detail in the next sections.  
+
+Just as you'd use a `main` function in many high-level languages, assembly requires us to specify an entry point for our program. We do this using the `global` declaration, which points to a _label_.
+
+Labels are assembly's way of giving human-readable names to specific instructions. They serve two purposes: making our code more understandable and allowing us to reference these instructions elsewhere in our program. You can declare a label by writing it followed by a colon, like this: `label:`. When you want to reference a label (for example, in a jump instruction), you use it without the colon: `label`.
+
+Typically, `global` references a `_start` label which is declared immediately after it. That is where our program will start executing.
+
+```s
+section .data
+  ; constants here
+
+section .bss
+  ; variables here
+
+section .text
+  global _start
+_start:
+  ; instructions here
+```
+
 ## At last, "Hello World"
+
+Finally, we have all the tools to build software in assembly. Very Nice!
+
+Our program will make use of two syscalls, `sys_write`, to print characters in a terminal, and `exit`, to terminate the process with a given status code.
+
+```s
+section .data
+  ; Here we define the constant msg, which holds the string we will print.
+  ; We use the `db` (define byte) directive which is used to define constant of one or more bytes (1 char = 1 byte)
+  ; We add 0xA at the end, which corresponds to `\n` and the string is null-terminated to allow terminals to print it correctly. 
+  msg db "Hello, World!", 0xA, 0
+
+section .text
+  global _start
+_start:
+  ; We need to call the sys_write syscall to print on the screen. Syscalls are invoked with the `syscall` instruction
+  ; and they are all identified by a number.
+  ;
+  ; The identifier for sys_write is 1 and syscall intruction will look for the instruction id in the register `rax`.
+  mov rax, 1
+  ; The syscall we want to invoke has the following signature
+  ;   size_t sys_write(uint fd, const char* buf, size_t count)
+  ;
+  ; syscall expects the first argument in rdi. The file descriptor identifying stdout is 1 
+  mov rdi, 1
+  ; rsi is the register for the second argument. We pass the message to print there
+  mov rsi, msg
+  ; rdx is the register for the third argument. This is simply the count of chars we want to print.
+  mov rdx, 14
+  ; we're now finally issuing the syscall
+  syscall
+  ; Now the message is printed! Time to exit the program.
+
+  ; Same as above, we invoke syscall with identifier 60, which is exit and has the following signature.
+  ;   void exit(int status)
+  mov rax, 60
+  ; rdi is the first argument. We put 0 for a clean exit.
+  mov rdi, 0
+  ; issuing the syscall
+  syscall
+```
+
+Assuming the code above is in a file called `01-hello-world.asm`, we can now finally assemble and launch our first program
+
+```sh
+# create a build directory to not mix source code with objects and executables
+mkdir build
+
+# assemble the code and store the resulting object files in the `build` folder
+nasm -g -f elf64 -o build/01-hello-world.o 01-hello-world.asm
+
+# link the objects into the executable build/01-hello-world.out 
+ld -o build/01-hello-world.out build/01-hello-world.o
+
+# execute the code
+build/01-hello-world.out
+```
+
+## Conclusion
