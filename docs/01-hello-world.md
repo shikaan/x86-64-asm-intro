@@ -48,7 +48,7 @@ Assembly refers to a _family of programming languages_ featuring instructions th
 
 In this guide, we will use _x86-64 assembly_ which can be assembled and executed on most personal computers. This choice should ease running and tinkering with the snippets along the way. 
 
-For historical reasons, there are two "flavors" of the x64-64 assembly syntax: one called _Intel_ and the other is called _AT&T_. The former is more in vogue in Windows circles, the latter, is instead more adopted in UNIX-land.
+For historical reasons, there are two "flavors" of the x64-64 assembly syntax: one called _Intel_ and the other is called _AT&T_.
 
 > [!TIP]
 > You can read up on the differences between Intel and AT&T syntax [here](https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm). If it's your absolute first time with assembly, it might be a little too early to make sense of it. Feel free to come back to this link in a couple of lessons.
@@ -175,13 +175,25 @@ _start:
 
 ## At last, "Hello World"
 
-Finally, we have all the tools to build software in assembly. Very Nice!
+Finally, we have all the tools to build software in assembly. Very Nice! 🔷
 
-Our program will make use of two syscalls, `sys_write`, to print characters in a terminal, and `exit`, to terminate the process with a given status code.
+Our program will make use of two system calls, `sys_write`, to print characters in a terminal, and `exit`, to terminate the process with a given status code.
+
+Using syscalls goes like this:
+- select the syscall to invoke by moving its identifier in `rax`
+- pass arguments to the syscall by populating appropriate registers
+- use the `syscall` instruction to fire the call
+
+The only other instruction we will use is `mov`, which we have seen in the instruction paragraph. It works pretty much like an assignment (the `=` operator) in many high level languages: it moves the content of the second operand into the first operand.
+
+Let's look at the code to see how all of this plays together.
+
+> [!TIP]
+> All the code snippets in this guide are heavily commented. Make sure you read the comments carefully!
 
 ```s
 section .data
-  ; Here we define the constant msg, which holds the string we will print.
+  ; Here we define the constant `msg`, which holds the string we will print.
   ; We use the `db` (define byte) directive which is used to define constant of one or more bytes (1 char = 1 byte)
   ; We add 0xA at the end, which corresponds to `\n` and the string is null-terminated to allow terminals to print it correctly. 
   msg db "Hello, World!", 0xA, 0
@@ -199,7 +211,7 @@ _start:
   ;
   ; syscall expects the first argument in rdi. The file descriptor identifying stdout is 1 
   mov rdi, 1
-  ; rsi is the register for the second argument. We pass the message to print there
+  ; rsi is the register for the second argument. We mov the message to print there
   mov rsi, msg
   ; rdx is the register for the third argument. This is simply the count of chars we want to print.
   mov rdx, 14
@@ -219,17 +231,20 @@ _start:
 Assuming the code above is in a file called `01-hello-world.asm`, we can now finally assemble and launch our first program
 
 ```sh
-# create a build directory to not mix source code with objects and executables
-mkdir build
-
 # assemble the code and store the resulting object files in the `build` folder
-nasm -g -f elf64 -o build/01-hello-world.o 01-hello-world.asm
+nasm -g -f elf64 -o 01-hello-world.o 01-hello-world.asm
 
-# link the objects into the executable build/01-hello-world.out 
-ld -o build/01-hello-world.out build/01-hello-world.o
+# link the objects into the executable 01-hello-world.out 
+ld -o 01-hello-world.out 01-hello-world.o
 
 # execute the code
-build/01-hello-world.out
+./01-hello-world.out
 ```
 
 ## Conclusion
+
+We have an hello world. Joy! 🛡️
+
+In this first article we learned some basic assembly concepts, we cut our teeth on its syntax, and we even wrote some working software. 
+
+We now know how to communicate with the operative system and we are ready to produce more interesting programs in the next article.
