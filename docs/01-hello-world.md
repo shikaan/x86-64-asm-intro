@@ -79,7 +79,7 @@ In our example, the mnemonic is `mov`, which stands for _move_, and the operands
 
 Some instructions will have more then mnemonic and operands. Additional parts such as _prefixes_ and _size directives_ will only be needed later, and we'll talk through them at the right moment.
 
-Fear not, there is no need to memorize all the possible instructions now. Whenever we'll come across new operations, we will discuss them, and with repetition you will remember them in no time.
+Fear not, there is no need to memorize all the possible instructions now. Whenever we'll come across new operations, we will discuss them, and with repetition you will remember in no time.
 
 The [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html) will be our instruction reference in the next chapters. Keep it handy!
 
@@ -87,9 +87,9 @@ The [Intel Software Developer Manuals (SDM)](https://www.intel.com/content/www/u
 
 You can think of registers as storage space baked right into the CPU itself. They are small and incredibly fast to access.
 
-There are different registers in x86-64. The first type are the so-called _general-purpose_ registers. In x86-64 they are sixteen in total and they are 64 bits wide. One can access the whole register or a subset of it by using a different names. 
+The most common registers are the so-called _general-purpose_ registers. In x86-64 they are sixteen in total and they are 64 bits wide. 
 
-For example, using `rax` (as in the code above) would address all the 64 bits in the `rax` register. With `al` you can access the lower byte of the same register.
+One can access the whole register or just a subset by using different names. For example, using `rax` (as in the code above) would address all the 64 bits in the `rax` register. With `al` you can access the lower byte of the same register.
 
 | Register | Higher byte | Lower byte | Lower 2 bytes¹ |	Lower 4 bytes² |
 |:---      |:---         |:---        |:---            |:---             |
@@ -110,8 +110,12 @@ For example, using `rax` (as in the code above) would address all the 64 bits in
 | r14      |             | r14b       | r14w           | r14d            |
 | r15      |             | r15b       | r15w           | r15d            |
 
+<sup>
 ¹: 2 bytes are sometimes called words (hence the w suffix)
-²: 4 bytes are sometimed called double-word or word (hence the d suffix)
+</sup><br>
+<sup>
+²: 4 bytes are sometimed called double-words or dwords (hence the d suffix)
+</sup>
 
 General-purpose means that they can store anything, in principle. In practice, we'll see that some registers have special meanings, some instructions only use certain registers, and some conventions dictate who is expected to write where.
 
@@ -121,7 +125,7 @@ The only non general-purpose register we will be concerned with is `rip`, the _i
 
 We need to convert our instructions into machine code if we want our CPU to execute them. 
 
-This process is fairly complex, so we won't dive into its details here. The only information you need is that the procedure is made of two steps: assemble and link.
+Without diving into the details of the process, the only information you need is that it is done in at least two steps: assemble and link.
 
 Assemblers are the tools used for assembling (duh!) our code into object code, a sequence of machine code statements. For this guide we'll use [NASM](https://www.nasm.us/) since it's available on all platforms and can be used to produce a variety of different of outputs.
 
