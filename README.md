@@ -20,9 +20,7 @@ sudo sh -c "wget -q https://shikaan.github.io/sup/install -O- | REPO=shikaan/shm
 ## Running an exercise
 
 ```sh
-shmux build -- 00-file.asm
-
-build/00-file.asm.out
+shmux run -- 00-file.asm
 ```
 
 ## References

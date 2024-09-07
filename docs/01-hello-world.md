@@ -1,40 +1,5 @@
-An accessible assembly introduction for high-level programmers
+Hello world
 ---
-
-Coming from JavaScript, Rust, C, or any other high-level language, looking at assembly snippets can be confusing or even scary.
-
-Let's take the following snippet:
-```s
-section .data
-  msg db "Hello, World!"
-
-section .text
-  global _start
-
-_start:
-  mov rax, 1
-  mov rdi, 1
-  mov rsi, msg
-  mov rdx, 13
-  syscall
-
-  mov rax, 60
-  mov rdi, 0
-  syscall
-```
-Thankfully the second line gives away what this does.
-
-None of the bread and butter of programming as we know it is here: conditionals and loops are nowhere to be seen, there is no way to create functions... heck, variables don't even have names!
-
-Where does one even start?
-
-This little introduction is meant to introduce you, somebody with programming experience, to the world of assembly. We'll discuss the basics of the language and map them to high-level programming constructs.
-
-By the end of this guide, you will be able to navigate assembly code, know where to look for information, and even write some simple programs all by yourself.
-
-Let's get started!
-
-# 1. Hello world
 
 Unsurprisingly, our first program will be a "Hello World".
 
@@ -191,42 +156,7 @@ Let's look at the code to see how all of this plays together.
 > [!TIP]
 > All the code snippets in this guide are heavily commented. Make sure you read the comments carefully!
 
-```s
-section .data
-  ; Here we define the constant `msg`, which holds the string we will print.
-  ; We use the `db` (define byte) directive which is used to define constant of one or more bytes (1 char = 1 byte)
-  ; We add 0xA at the end, which corresponds to `\n` and the string is null-terminated to allow terminals to print it correctly. 
-  msg db "Hello, World!", 0xA, 0
-
-section .text
-  global _start
-_start:
-  ; We need to call the sys_write syscall to print on the screen. Syscalls are invoked with the `syscall` instruction
-  ; and they are all identified by a number.
-  ;
-  ; The identifier for sys_write is 1 and syscall intruction will look for the instruction id in the register `rax`.
-  mov rax, 1
-  ; The syscall we want to invoke has the following signature
-  ;   size_t sys_write(uint fd, const char* buf, size_t count)
-  ;
-  ; syscall expects the first argument in rdi. The file descriptor identifying stdout is 1 
-  mov rdi, 1
-  ; rsi is the register for the second argument. We mov the message to print there
-  mov rsi, msg
-  ; rdx is the register for the third argument. This is simply the count of chars we want to print.
-  mov rdx, 14
-  ; we're now finally issuing the syscall
-  syscall
-  ; Now the message is printed! Time to exit the program.
-
-  ; Same as above, we invoke syscall with identifier 60, which is exit and has the following signature.
-  ;   void exit(int status)
-  mov rax, 60
-  ; rdi is the first argument. We put 0 for a clean exit.
-  mov rdi, 0
-  ; issuing the syscall
-  syscall
-```
+{% include editor.html exercise="42rge8zys" %}
 
 Assuming the code above is in a file called `01-hello-world.asm`, we can now finally assemble and launch our first program
 
@@ -243,7 +173,7 @@ ld -o 01-hello-world.out 01-hello-world.o
 
 ## Conclusion
 
-We have an hello world. Joy! 🛡️
+We have an hello world. You're happy!
 
 In this first article we learned some basic assembly concepts, we cut our teeth on its syntax, and we even wrote some working software. 
 
