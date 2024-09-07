@@ -13,7 +13,7 @@ section .text
 global _start
 
 _start:
-  mov r10, rsp
+  mov r10, [rsp]
   cmp r10, 2
   jne .error
   
