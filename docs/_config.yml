@@ -1,4 +1,7 @@
 title: A friendly introduction to assembly for high-level programmers
 author: Manuel Spagnolo
+description: "A friendly introduction to assembly for high-level programmers"
+baseurl: "/x86-64-asm-intro"
+url: "https://shikaan.github.io"
 
-remote_theme: broccolini/swiss
+remote_theme: huangyz0918/moving
