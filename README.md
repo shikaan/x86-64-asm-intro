@@ -1,7 +1,8 @@
-# x86-64-asm-intro
-Learning x86-64 assembly with nasm
+x86-64-asm-intro
+---
 
-## [Program](./docs/program.md)
+This repository represents the supporting material for the Assembly mini course at 
+[shikaan.github.io](https://shikaan.github.io/assembly/x86/guide/2024/09/08/x86-64-introduction-hello.html)
 
 ## Dependencies
 
