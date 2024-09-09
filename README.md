@@ -12,7 +12,7 @@ This repository represents the supporting material for the Assembly mini course 
 sudo apt install nasm
 ```
 
-### shmux
+### shmux (optional)
 
 ```sh
 sudo sh -c "wget -q https://shikaan.github.io/sup/install -O- | REPO=shikaan/shmux sh -"
@@ -21,15 +21,11 @@ sudo sh -c "wget -q https://shikaan.github.io/sup/install -O- | REPO=shikaan/shm
 ## Running an exercise
 
 ```sh
-shmux build -- 00-file.asm
+# with shmux
+shmux run -- 00-file.asm
 
-build/00-file.asm.out
+# else
+nasm -g -f elf64 -o build/00-file.o 00-file.asm
+ld -o build/00-file.out build/00-file.o
+build/00-file.out
 ```
-
-## References
-
-- https://web.stanford.edu/class/cs107/guide/x86-64.html
-- https://cs.lmu.edu/~ray/notes/nasmtutorial/
-- https://github.com/0xAX/asm
-- https://refspecs.linuxbase.org/elf/x86_64-abi-0.99.pdf
-
