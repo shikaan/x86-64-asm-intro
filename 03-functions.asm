@@ -1,65 +1,68 @@
 section .data
-  ; This is our usual set of constants for syscalls.
+  ; Usual set of constants for syscalls.
   sys_write equ 1
   sys_exit  equ 60
   fd_stdout equ 1
 
-  ; These are the input parameters of our program.
-  ; We will roll a die with `faces` faces.
+  ; Input parameters of our programr. We will
+  ; roll a die with `faces` sides.
   faces     equ 6
 
-  ; The result will be print to the screen. We need a
-  ; buffer to store the result, so we can print it.
-  buffer    db `0\n`
-  len       equ 2
+  ; Buffer to store the digit to print.
+  ; We don't need its length since we print one
+  ; digit at a time (so it's always 1).
+  buffer    db   ` `
 
 section .text
   global _start
 _start:
-  ; Our program is nicely structured in functions.
-  ; Go check them out when you encounter a `call`!
-
-  ; First thing we do is generating a random number
-  ; in the range [1, faces] and store it in `rax`.
+  ; First, we generate a random number in the range
+  ; [1, faces] by invoking a function where the 
+  ; argument is the max allowed random value.
+  
+  ; `rdi` is the first function argument register.
+  ; We store `faces` there before calling random.
+  mov rdi, faces
   call random
 
-  ; We store the result in `rdi` to print it later.
+  ; Again, we pass the digit to print via `rdi` 
   mov rdi, rax
-  ; We can print our single-digit number on screen.
   call print_digit
 
-  ; We can now exit.
+  ; Now, we can exit
   call exit
 
 random:
   ; This function generates a random number in the
-  ; range [1, faces] using the hardware RNG and 
-  ; scaling the result with a modulo operation.
-  
-  ; rdrand generates a random number in the range
-  ; [0, 2^64-1] and stores it in `rax`.
+  ; range [1, rdi] and returns the result in rax.
+  ;
+  ; In high-level languages, you'd write this as: 
+  ;
+  ;   (rand() % rdi) + 1
+  ;
+  ; Where `rand()` is a random number and % is the
+  ; modulo operation.
+
+  ; Same as previous example, we get a random number.
+  ; We can store it in `rax` because `rax` is 
+  ; _caller-saved_, so we need not preserve it.
   rdrand rax
 
-  ; To get the modulo of a number, we perform a
-  ; division with `div` and collect the remainder.
+  ; Modulo is the remainder of a division. In assembly, 
+  ; we have to divide and then collect the remainder.
+  ; 
   ; `div` divides the value in `rax` by the operand,
-  ; saves the result back in `rax` and the remainder
+  ; saves the quotient in `rax`, and the remainder
   ; in `rdx`.
   ;
-  ; Here we divide the random number by the number of
-  ; faces of the die. The remainder will be the result
-  ; of the roll.
-  mov rsi, faces
-  mov rdx, 0
-  div rsi
+  ; `rdi` is _caller-saved_, we can safely use it.
+  div rdi
 
-  ; We store the result in `rax` to print it later.
+  ; We store the result in `rax` to return it later.
   mov rax, rdx
   ; We increment the result to adjust the range to
-  ; [1, faces]. In high-leveallese, this would be `rax++`.
-  inc rax
-
-  ; We are done, let's return to the caller.
+  ; [1, faces]; something like `rax++`.
+  inc rax.
   ret
 
 print_digit:
@@ -67,32 +70,29 @@ print_digit:
   ; to the screen, using the buffer we defined earlier. 
 
   ; First, we convert the number to its character 
-  ; representation. As you can see in any ASCII table,
-  ; the digits are in the range [48, 57].
-  ; Adding 48 yields the ASCII value of the character.
+  ; representation. According to the ASCII table,
+  ; digits are in the range [48, 57]. Adding 48 yields
+  ; the ASCII value of the character.
   add rdi, 48
 
-  ; We want to replace the first character in the
-  ; buffer with the digit.
+  ; Replace the first `buffer` character with the digit.
   ;
-  ; The [] syntax is used to get the memory location
-  ; of what's inside the brackets. In plain English, 
-  ; `[thing]` means "memory location whose address is
-  ; thing".  We use `dil` to access the lower byte of 
-  ; `rdi` as we saw in the first lesson.
+  ; The [] syntax gets the memory location of what's 
+  ; inside the brackets. In plain English,  `[thing]` 
+  ; means "memory location whose address is thing".  
+  ; We use `dil` to access the lower byte of  `rdi` as
+  ; we saw in the first lesson.
   ;
-  ; So, this instruction means "store the lower byte
-  ; of `rdi` in the memory location of `buffer`".
+  ; This instruction means "store the lower byte of 
+  ;`rdi` in the memory location of `buffer`".
   mov [buffer], dil
   
   ; This is the print routine we've seen before.
   mov rax, sys_write
   mov rsi, buffer
-  mov rdx, len
+  mov rdx, 1
   mov rdi, fd_stdout
-  syscall
-
-  ; Once again, we can return to the caller.
+  syscall.
   ret
 
 exit:
