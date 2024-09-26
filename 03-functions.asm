@@ -62,7 +62,7 @@ random:
   mov rax, rdx
   ; We increment the result to adjust the range to
   ; [1, faces]; something like `rax++`.
-  inc rax.
+  inc rax
   ret
 
 print_digit:
@@ -92,7 +92,7 @@ print_digit:
   mov rsi, buffer
   mov rdx, 1
   mov rdi, fd_stdout
-  syscall.
+  syscall
   ret
 
 exit:
